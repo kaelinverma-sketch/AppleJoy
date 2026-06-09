@@ -139,8 +139,6 @@ with BuildPart() as final_body:
     if top_x_edges:
         chamfer(top_x_edges, length=12)
 
-
-
     # Cylinder — x=190 from new origin (build space x=169.33), z=310
     cyl_plane = Plane(origin=(169.33, 111, 310), x_dir=(1,0,0), z_dir=(0,-1,0))
     with BuildSketch(cyl_plane):
@@ -245,6 +243,7 @@ with BuildPart() as text_joystick_body:
     with BuildSketch(text_joystick_plane):
         Text("Joystick", font_size=60, align=(Align.CENTER, Align.CENTER))
     extrude(amount=6)
+
 combined = final_body.part + rect_body.part + left_lip_body.part + right_lip_body.part - text_body.part - text_y_body.part - text_x_body.part - text_joystick_body.part
 
 # ── Mirror and Final Positioning ─────────────────────────────────────────────
@@ -272,7 +271,25 @@ if export_path:
     export_step(mating_part, export_path)
     print(f"Mating part exported to: {export_path}")
 else:
-    print("Export cancelled.")
+    print("STEP export cancelled.")
+
+# ── Export to STL with file dialog ───────────────────────────────────────────
+root2 = tk.Tk()
+root2.withdraw()
+root2.attributes('-topmost', True)
+stl_path = filedialog.asksaveasfilename(
+    title="Save STL file",
+    defaultextension=".stl",
+    filetypes=[("STL files", "*.stl"), ("All files", "*.*")],
+    initialfile="Apple_Joy_top_mating.stl"
+)
+root2.destroy()
+
+if stl_path:
+    export_stl(mating_part, stl_path)
+    print(f"Mating part STL exported to: {stl_path}")
+else:
+    print("STL export cancelled.")
 
 # ── Display ───────────────────────────────────────────────────────────────────
 set_defaults(axes=True, axes0=True, grid=(True, True, True))
