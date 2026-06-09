@@ -210,7 +210,7 @@ import tkinter as tk
 from tkinter import filedialog
 
 root = tk.Tk()
-root.withdraw()  # hide the root window
+root.withdraw()
 root.attributes('-topmost', True)
 export_path = filedialog.asksaveasfilename(
     title="Save STEP file",
@@ -224,7 +224,25 @@ if export_path:
     export_step(combined, export_path)
     print(f"Model exported to: {export_path}")
 else:
-    print("Export cancelled.")
+    print("STEP export cancelled.")
+
+# ── Export to STL with file dialog ───────────────────────────────────────────
+root2 = tk.Tk()
+root2.withdraw()
+root2.attributes('-topmost', True)
+stl_path = filedialog.asksaveasfilename(
+    title="Save STL file",
+    defaultextension=".stl",
+    filetypes=[("STL files", "*.stl"), ("All files", "*.*")],
+    initialfile="Apple_Joy_top.stl"
+)
+root2.destroy()
+
+if stl_path:
+    export_stl(combined, stl_path)
+    print(f"Model STL exported to: {stl_path}")
+else:
+    print("STL export cancelled.")
 
 # ── Display in OCP CAD Viewer ─────────────────────────────────────────────────
 set_defaults(axes=True, axes0=True, grid=(True, True, True))
