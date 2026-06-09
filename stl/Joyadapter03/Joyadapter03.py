@@ -170,7 +170,7 @@ import tkinter as tk
 from tkinter import filedialog, messagebox
 
 root = tk.Tk()
-root.withdraw()  # Hide the root window
+root.withdraw()
 root.lift()
 root.attributes("-topmost", True)
 
@@ -187,11 +187,39 @@ if export_path:
         os.makedirs(os.path.dirname(os.path.abspath(export_path)), exist_ok=True)
         export_step(final_result, export_path)
         messagebox.showinfo("Export Successful", f"Model exported to:\n{export_path}")
-        print(f"\n  ✓ Model exported to: {export_path}")
+        print(f"\n  ✓ STEP exported to: {export_path}")
     except Exception as e:
         messagebox.showerror("Export Failed", f"Error: {e}")
-        print(f"\n  ✗ Export failed: {e}")
+        print(f"\n  ✗ STEP export failed: {e}")
 else:
-    print("\n  Export cancelled.")
+    print("\n  STEP export cancelled.")
 
 root.destroy()
+
+# ── Export to STL file via popup dialog ──────────────────────────────────────
+root2 = tk.Tk()
+root2.withdraw()
+root2.lift()
+root2.attributes("-topmost", True)
+
+stl_path = filedialog.asksaveasfilename(
+    title="Export STL File",
+    defaultextension=".stl",
+    initialfile="gear_model.stl",
+    initialdir=os.path.expanduser("~/Desktop"),
+    filetypes=[("STL Files", "*.stl"), ("All Files", "*.*")]
+)
+
+if stl_path:
+    try:
+        os.makedirs(os.path.dirname(os.path.abspath(stl_path)), exist_ok=True)
+        export_stl(final_result, stl_path)
+        messagebox.showinfo("Export Successful", f"Model exported to:\n{stl_path}")
+        print(f"\n  ✓ STL exported to: {stl_path}")
+    except Exception as e:
+        messagebox.showerror("Export Failed", f"Error: {e}")
+        print(f"\n  ✗ STL export failed: {e}")
+else:
+    print("\n  STL export cancelled.")
+
+root2.destroy()
